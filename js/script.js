@@ -12,12 +12,21 @@ let  thumbsHtml = '';
 
 for(let i = 1; i <= numImages; i++){
   imagesHtml += `<img class="item" src="img/0${i}.jpg" alt="">`;
-  thumbsHtml += `<img class="item-thumb" src="img/0${i}.jpg" alt="">`;
+  
+  // creo un nuovo tag img come -> document.createElement('img')
+  const thumb = new Image();
+  thumb.src = `img/0${i}.jpg`;
+  thumb.className = 'item-thumb';
+  // aggiungo alla thumb l'id dell'immagine con una proprità custom
+  thumb.thumbId = i - 1;
+  // come funzione di callback utilizzo una mia funzione esterna
+  // che riceve this internamente
+  thumb.addEventListener('click',clickThumb)
+  thumbs.append(thumb);
 }
 
 // inserisco le immagini e le thumb nei contenitori
 slider.innerHTML = imagesHtml;
-thumbs.innerHTML = thumbsHtml;
 
 // prendo l'elenco delle immagini e delle thumbs
 const imagesList = document.getElementsByClassName('item');
@@ -28,24 +37,40 @@ imagesList[counterImages].classList.add('active');
 thumbsList[counterImages].classList.add('active');
 
 prev.addEventListener('click', function(){
-  imagesList[counterImages].classList.remove('active');
-  thumbsList[counterImages].classList.remove('active');
-  counterImages++;
-  
-  // se il contatore raggiunge il limite lo resetto
-  if(counterImages === numImages) counterImages = 0;
-
-  imagesList[counterImages].classList.add('active');
-  thumbsList[counterImages].classList.add('active');
+  nextPrev(true);
 })
 
 next.addEventListener('click', function(){
+  nextPrev(false);
+})
+
+function clickThumb(){
+  removeActive();
+  //  con this ottengo l'elemento cliccato
+  console.log(this)
+  // assegno il mio valore custom thumbId alla variabile globale counterImages
+  counterImages = this.thumbId
+  addActive()
+}
+
+function nextPrev(isNext){
+  removeActive();
+  if(isNext){
+    counterImages++;
+    if(counterImages === numImages) counterImages = 0;
+  }else{
+    counterImages--;
+    if(counterImages < 0) counterImages = numImages - 1;
+  }
+  addActive()
+}
+
+function removeActive(){
   imagesList[counterImages].classList.remove('active');
   thumbsList[counterImages].classList.remove('active');
-  counterImages--;
+}
 
-  // se il contatore è < 0 lo faccio puntare all'ultima immagine
-  if(counterImages < 0) counterImages = numImages - 1;
+function addActive(){
   imagesList[counterImages].classList.add('active');
   thumbsList[counterImages].classList.add('active');
-})
+}

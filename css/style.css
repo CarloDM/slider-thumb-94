@@ -103,3 +103,7 @@ body{
 .prev{
   transform: rotate(133deg);
 }
+
+.item-thumb{
+  cursor: pointer;
+}
