@@ -74,3 +74,17 @@ function addActive(){
   imagesList[counterImages].classList.add('active');
   thumbsList[counterImages].classList.add('active');
 }
+
+//// AUTOPLAY
+let isMouseOver = false
+
+// ogni 2 secondi lancio next solo se il mouse non è sopra lo slider
+setInterval(function(){
+  if(!isMouseOver) nextPrev(true)
+},2000)
+
+// col mouse è sullo slider salvo il dato nel flag
+slider.addEventListener('mouseenter', () => isMouseOver = true)
+
+// col mouse fuori dallo slider salvo il dato nel flag
+slider.addEventListener('mouseleave', () => isMouseOver = false)
